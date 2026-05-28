@@ -1,0 +1,24 @@
+[Unit]
+Description=EA voice bridge (Twilio Media Streams <-> Gemini Live)
+After=network-online.target paperclip.service cloudflared.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=paperclip
+Group=paperclip
+WorkingDirectory=/opt/ea-voice-bridge
+EnvironmentFile=/etc/ea/env
+ExecStart=/usr/bin/node /opt/ea-voice-bridge/index.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/ea-voice-bridge
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+# Cloudflare Tunnel config for EA. Only the public-facing bridge routes are exposed.
+# The Paperclip UI stays SSH-tunnel-only — it is NOT in this ingress.
+#
+# Setup (once, on the droplet):
+#   cloudflared tunnel login
+#   cloudflared tunnel create ea-voice-bridge
+#   cloudflared tunnel route dns ea-voice-bridge ea.<your-domain>
+#   sudo cp config.yml /etc/cloudflared/config.yml
+#   sudo cloudflared service install
+#
+# WebSockets (the /media-stream route) work on the free tier with no extra config.
+
+tunnel: ea-voice-bridge
+credentials-file: /etc/cloudflared/ea-voice-bridge.json
+
+ingress:
+  - hostname: ea.example.com        # replace with your real hostname
+    service: http://127.0.0.1:5050
+  - service: http_status:404

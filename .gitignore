@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+.env.*.local
+**/.paperclip/
+**/secrets/
+dist/
+build/
+*.tsbuildinfo
+
+# EA-specific: never commit real secrets, contacts, or vault notes to this public repo
+contacts.json
+/etc/ea/
+*.sqlite
+*.sqlite-*
+notes/*.md
+!notes/.gitkeep
+services/voice-bridge/.env

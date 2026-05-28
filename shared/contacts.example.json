@@ -1,0 +1,19 @@
+{
+  "_comment": "PLACEHOLDER. The real file lives at /etc/ea/contacts.json (chmod 600, owned by paperclip) and is NEVER committed to this public repo. Copy this shape, fill real values on the droplet. Keys are short slugs EA can resolve from a spoken name.",
+  "contacts": {
+    "amber": {
+      "name": "Amber Reynolds",
+      "phone": "+15555550101",
+      "email": "amber@example.com",
+      "teams_upn": "amber@example.com",
+      "relationship": "site supervisor"
+    },
+    "brother": {
+      "name": "Dale Fogle",
+      "phone": "+15555550102",
+      "email": "dale@example.com",
+      "teams_upn": null,
+      "relationship": "brother"
+    }
+  }
+}

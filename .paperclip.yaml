@@ -1,0 +1,51 @@
+# EA routines + project env.
+# NOTE: routines are NOT imported by companies.sh — create them via the Paperclip
+# API or UI using the values below (this block is the source of truth + docs).
+# Per-routine env precedence is agent < project < routine (platform v2026.525.0).
+
+routines:
+  briefing-morning:
+    triggers:
+      - kind: schedule
+        cronExpression: "30 11 * * *"      # 11:30 UTC = 07:30 America/New_York
+        timezone: America/New_York
+    assigneeAgentSlug: ea
+    concurrencyPolicy: skip_if_active
+    catchUpPolicy: skip_missed
+    title: "Daily briefing (07:30 ET)"
+    prompt: |
+      Run the `daily-briefing` skill. It reads open `reminder` Issues due in the
+      next 24h, yesterday's vault notes, and today's calendar, formats a 3-bullet
+      SMS, and sends it to BOARD_PHONE. If there is nothing to report, it sends
+      nothing — that is correct. If the skill returns ok:false, run
+      diagnose-why-work-stopped and escalate Tier 1 with the diagnosed reason.
+
+  bridge-heartbeat:
+    triggers:
+      - kind: schedule
+        cronExpression: "*/5 * * * *"      # every 5 minutes
+        timezone: America/New_York
+    assigneeAgentSlug: ea
+    concurrencyPolicy: skip_if_active
+    catchUpPolicy: skip_missed
+    title: "Bridge heartbeat ping"
+    prompt: |
+      GET http://127.0.0.1:5050/healthz. If it is non-2xx three consecutive times,
+      escalate Tier 2 `adapter-broken` with error_signature "bridge-down". On the
+      first success after a failure streak, send a board-notify Tier 0 "bridge back up".
+
+projectEnv:
+  PAPERCLIP_API_URL:      { type: literal, value: "http://127.0.0.1:3100" }
+  EA_COMPANY_SLUG:        { type: literal, value: "ea" }
+  EA_CONTACTS_PATH:       { type: literal, value: "/etc/ea/contacts.json" }
+  EA_VAULT_REPO_PATH:     { type: literal, value: "/var/lib/ea-voice-bridge/vault" }
+  BOARD_DND_HOURS:        { type: literal, value: "22-07" }
+  PAPERCLIP_API_TOKEN:    { type: secret, source: PAPERCLIP_API_TOKEN }
+  BOARD_PHONE:            { type: secret, source: BOARD_PHONE }
+  TWILIO_ACCOUNT_SID:     { type: secret, source: TWILIO_ACCOUNT_SID }
+  TWILIO_AUTH_TOKEN:      { type: secret, source: TWILIO_AUTH_TOKEN }
+  TWILIO_FROM_NUMBER:     { type: secret, source: TWILIO_FROM_NUMBER }
+  MS_GRAPH_TENANT_ID:     { type: secret, source: MS_GRAPH_TENANT_ID }
+  MS_GRAPH_CLIENT_ID:     { type: secret, source: MS_GRAPH_CLIENT_ID }
+  MS_GRAPH_CLIENT_SECRET: { type: secret, source: MS_GRAPH_CLIENT_SECRET }
+  MS_GRAPH_REFRESH_TOKEN: { type: secret, source: MS_GRAPH_REFRESH_TOKEN }

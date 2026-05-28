@@ -1,0 +1,21 @@
+{
+  "name": "ea-voice-bridge",
+  "version": "0.1.0",
+  "description": "Twilio Media Streams <-> Gemini Live audio bridge for EA",
+  "type": "module",
+  "main": "index.js",
+  "engines": { "node": ">=20.10" },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@fastify/formbody": "^8.0.0",
+    "@fastify/websocket": "^11.0.0",
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.0.0",
+    "twilio": "^5.3.0",
+    "ws": "^8.18.0"
+  }
+}
