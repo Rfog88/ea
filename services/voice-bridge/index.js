@@ -20,7 +20,7 @@ dotenv.config({ path: process.env.EA_ENV_FILE || "/etc/ea/env" });
 
 const PORT = process.env.PORT || 5050;
 const VOICE = process.env.GEMINI_VOICE || "Charon";
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-live-preview";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-native-audio-preview-09-2025";
 const BASE_PERSONA = loadPersona(); // fail fast at boot if missing
 
 const HERE = dirname(fileURLToPath(import.meta.url));
