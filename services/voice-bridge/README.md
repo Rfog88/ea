@@ -24,12 +24,16 @@ To exercise the full path locally, tunnel `5050` (cloudflared or ngrok) and poin
 ## Deploy (droplet)
 
 ```bash
-sudo mkdir -p /opt/ea-voice-bridge /var/lib/ea-voice-bridge
-sudo rsync -a services/voice-bridge/ /opt/ea-voice-bridge/   # or git sparse-checkout
-cd /opt/ea-voice-bridge && sudo -u paperclip npm ci
-sudo cp systemd/ea-voice-bridge.service /etc/systemd/system/
+# Deploy the WHOLE repo: the bridge resolves skills (../../skills), migrations
+# (../../../migrations) and the persona (../../../shared/persona) relative to the
+# repo root, so it MUST keep that layout. Run from the repo root.
+sudo mkdir -p /opt/ea /var/lib/ea-voice-bridge
+sudo rsync -a --exclude '.git' ./ /opt/ea/
+sudo chown -R paperclip:paperclip /opt/ea /var/lib/ea-voice-bridge
+cd /opt/ea/services/voice-bridge && sudo -u paperclip npm ci
+sudo cp /opt/ea/services/voice-bridge/systemd/ea-voice-bridge.service /etc/systemd/system/
 sudo systemctl daemon-reload && sudo systemctl enable --now ea-voice-bridge
-sudo cp cloudflared/config.yml /etc/cloudflared/config.yml   # edit hostname first
+sudo cp /opt/ea/services/voice-bridge/cloudflared/config.yml /etc/cloudflared/config.yml   # edit hostname first
 systemctl status ea-voice-bridge
 curl http://127.0.0.1:5050/healthz
 ```

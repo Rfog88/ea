@@ -58,7 +58,8 @@ Full plan: `C:\Users\RyanFogle\.claude\plans\plan-mode-build-ea-jiggly-sundae.md
 This repo is the authoring surface. Import on the droplet via:
 
 ```bash
-npx companies.sh add https://github.com/Rfog88/ea/tree/master
+# --include is required: the default (company,agents) skips the 11 skills.
+npx companies.sh add https://github.com/Rfog88/ea/tree/master --include company,agents,projects,tasks,issues,skills
 ```
 
 The voice bridge is deployed separately as a systemd unit — see `services/voice-bridge/README.md`. Routines are created via the Paperclip API/UI (not imported by `companies.sh`).

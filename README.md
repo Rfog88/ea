@@ -7,7 +7,8 @@ Single user. Not a product. Separate company from Vantyx (VAN) and Faceless Medi
 ## Import on the droplet
 
 ```bash
-npx companies.sh add https://github.com/Rfog88/ea/tree/master
+# --include is required: the default (company,agents) skips the 11 skills.
+npx companies.sh add https://github.com/Rfog88/ea/tree/master --include company,agents,projects,tasks,issues,skills
 ```
 
 For updates after the first add:
@@ -55,7 +56,7 @@ Full implementation plan: `~/.claude/plans/plan-mode-build-ea-jiggly-sundae.md`.
 ## Droplet-side steps (not done by `companies.sh`)
 
 1. Create `/etc/ea/env` (chmod 600) and `/etc/ea/contacts.json`.
-2. Deploy `services/voice-bridge/` to `/opt/ea-voice-bridge`, `npm ci`, install the systemd unit.
+2. Deploy the **whole repo** to `/opt/ea` (the bridge resolves skills/migrations/persona relative to the repo root, so the bridge-only layout breaks), then `cd /opt/ea/services/voice-bridge && npm ci` and install the systemd unit.
 3. Configure Cloudflare Tunnel (`cloudflared/config.yml`).
 4. Register Azure AD app (delegated Graph scopes) + mint refresh token.
 5. Twilio: number, voice webhook, messaging service, A2P 10DLC (see plan Section 7).
