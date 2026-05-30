@@ -5,7 +5,7 @@ diagnose-why-work-stopped
 escalate-to-board
 board-notify
 create-reminder
-send-sms
+send-discord
 send-email
 log-note
 read-calendar
