@@ -6,7 +6,10 @@
 
 import "./env.mjs";
 
-const COMPANY_SLUG = process.env.EA_COMPANY_SLUG || "ea";
+// This Paperclip build addresses companies by UUID in API paths, NOT by slug.
+// EA_COMPANY_ID must be the company UUID; EA_COMPANY_SLUG is kept only as a
+// last-resort fallback for older instances.
+const COMPANY = process.env.EA_COMPANY_ID || process.env.EA_COMPANY_SLUG || "ea";
 
 function base() {
   const url = process.env.PAPERCLIP_API_URL;
@@ -42,7 +45,7 @@ async function api(path, init = {}) {
 
 // Create an Issue assigned to the `ea` agent.
 export function createIssue({ title, body, labels = [], dueAt = null, assigneeSlug = "ea", parentId = null }) {
-  return api(`/api/companies/${COMPANY_SLUG}/issues`, {
+  return api(`/api/companies/${COMPANY}/issues`, {
     method: "POST",
     body: JSON.stringify({
       title,
@@ -64,13 +67,13 @@ export function commentIssue(issueId, body) {
 
 export function findOpenIssueByLabel(label, key) {
   const q = new URLSearchParams({ label, q: key, status: "open" });
-  return api(`/api/companies/${COMPANY_SLUG}/issues?${q}`);
+  return api(`/api/companies/${COMPANY}/issues?${q}`);
 }
 
 // Two-step routine creation: create routine, then attach a one-shot schedule trigger.
 // Used by schedule-outbound-call. The trigger fires once at fireAtIso.
 export async function createOneShotRoutine({ title, prompt, fireAtIso, assigneeSlug = "ea" }) {
-  const routine = await api(`/api/companies/${COMPANY_SLUG}/routines`, {
+  const routine = await api(`/api/companies/${COMPANY}/routines`, {
     method: "POST",
     body: JSON.stringify({ title, prompt, assigneeAgentSlug: assigneeSlug, concurrencyPolicy: "always_enqueue" }),
   });
