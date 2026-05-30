@@ -47,8 +47,8 @@ projectEnv:
   TWILIO_AUTH_TOKEN:      { type: secret, source: TWILIO_AUTH_TOKEN }
   TWILIO_FROM_NUMBER:     { type: secret, source: TWILIO_FROM_NUMBER }
   DISCORD_BOT_TOKEN:      { type: secret, source: DISCORD_BOT_TOKEN }
-  DISCORD_CHANNEL_ID:     { type: literal, value: "" }   # set to the EA channel id
-  DISCORD_OWNER_ID:       { type: literal, value: "" }   # set to Ryan's Discord user id
+  DISCORD_CHANNEL_ID:     { type: literal, value: "1510376916815970447" }   # #ea channel
+  DISCORD_OWNER_ID:       { type: literal, value: "1052280702592368720" }   # Ryan's Discord user id (inbound allowlist)
   MS_GRAPH_TENANT_ID:     { type: secret, source: MS_GRAPH_TENANT_ID }
   MS_GRAPH_CLIENT_ID:     { type: secret, source: MS_GRAPH_CLIENT_ID }
   MS_GRAPH_CLIENT_SECRET: { type: secret, source: MS_GRAPH_CLIENT_SECRET }
