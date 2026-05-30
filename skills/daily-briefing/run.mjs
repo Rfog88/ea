@@ -6,6 +6,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { findOpenIssueByLabel } from "../../shared/lib/paperclip.mjs";
 import { graphFetch } from "../../shared/lib/graph.mjs";
+import { sendMessage } from "../../shared/lib/discord.mjs";
 
 function etDayBounds(offsetDays = 0) {
   // Compute ET midnight bounds without a tz lib: ET is UTC-5 (EST) / UTC-4 (EDT).
@@ -62,16 +63,6 @@ async function getMeetings() {
   }
 }
 
-async function sendSms(body) {
-  const sid = process.env.TWILIO_ACCOUNT_SID, token = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_FROM_NUMBER, to = process.env.BOARD_PHONE;
-  const url = `https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`;
-  const form = new URLSearchParams({ From: from, To: to, Body: body });
-  const auth = Buffer.from(`${sid}:${token}`).toString("base64");
-  const res = await fetch(url, { method: "POST", headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/x-www-form-urlencoded" }, body: form });
-  if (!res.ok) { const e = new Error(`twilio ${res.status}`); e.reason = "external-quota-exceeded"; throw e; }
-}
-
 async function main() {
   readFileSync(0, "utf8"); // drain stdin
   const [reminders, notes, meetings] = await Promise.all([getReminders(), Promise.resolve(getYesterdayNotes()), getMeetings()]);
@@ -87,7 +78,7 @@ async function main() {
   }
 
   const msg = `Morning Ryan. ${parts.join(". ")}.`;
-  await sendSms(msg.slice(0, 1500));
+  await sendMessage(msg.slice(0, 1900)); // Discord cap is 2000 chars
   console.log(JSON.stringify({ ok: true, sent: true, reminders: reminders.length, meetings: meetings.length, notes: notes.length }));
 }
 

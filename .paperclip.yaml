@@ -16,8 +16,8 @@ routines:
     prompt: |
       Run the `daily-briefing` skill. It reads open `reminder` Issues due in the
       next 24h, yesterday's vault notes, and today's calendar, formats a 3-bullet
-      SMS, and sends it to BOARD_PHONE. If there is nothing to report, it sends
-      nothing — that is correct. If the skill returns ok:false, run
+      message, and sends it to Ryan over Discord. If there is nothing to report,
+      it sends nothing — that is correct. If the skill returns ok:false, run
       diagnose-why-work-stopped and escalate Tier 1 with the diagnosed reason.
 
   bridge-heartbeat:
@@ -30,9 +30,10 @@ routines:
     catchUpPolicy: skip_missed
     title: "Bridge heartbeat ping"
     prompt: |
-      GET http://127.0.0.1:5050/healthz. If it is non-2xx three consecutive times,
-      escalate Tier 2 `adapter-broken` with error_signature "bridge-down". On the
-      first success after a failure streak, send a board-notify Tier 0 "bridge back up".
+      GET http://127.0.0.1:5050/healthz (voice bridge) AND http://127.0.0.1:5051/healthz
+      (discord bridge). If either is non-2xx three consecutive times, escalate Tier 2
+      `adapter-broken` with error_signature "bridge-down:<voice|discord>". On the first
+      success after a failure streak, send a board-notify Tier 0 "bridge back up".
 
 projectEnv:
   PAPERCLIP_API_URL:      { type: literal, value: "http://127.0.0.1:3100" }
@@ -45,6 +46,9 @@ projectEnv:
   TWILIO_ACCOUNT_SID:     { type: secret, source: TWILIO_ACCOUNT_SID }
   TWILIO_AUTH_TOKEN:      { type: secret, source: TWILIO_AUTH_TOKEN }
   TWILIO_FROM_NUMBER:     { type: secret, source: TWILIO_FROM_NUMBER }
+  DISCORD_BOT_TOKEN:      { type: secret, source: DISCORD_BOT_TOKEN }
+  DISCORD_CHANNEL_ID:     { type: literal, value: "" }   # set to the EA channel id
+  DISCORD_OWNER_ID:       { type: literal, value: "" }   # set to Ryan's Discord user id
   MS_GRAPH_TENANT_ID:     { type: secret, source: MS_GRAPH_TENANT_ID }
   MS_GRAPH_CLIENT_ID:     { type: secret, source: MS_GRAPH_CLIENT_ID }
   MS_GRAPH_CLIENT_SECRET: { type: secret, source: MS_GRAPH_CLIENT_SECRET }

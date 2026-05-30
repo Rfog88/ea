@@ -1,0 +1,23 @@
+[Unit]
+Description=EA Discord bridge (inbound EA<->Ryan messages)
+After=network-online.target paperclip.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=paperclip
+Group=paperclip
+WorkingDirectory=/opt/ea/services/discord-bridge
+EnvironmentFile=/etc/ea/env
+ExecStart=/usr/bin/node /opt/ea/services/discord-bridge/index.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

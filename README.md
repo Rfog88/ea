@@ -1,6 +1,6 @@
 # EA — Paperclip Company
 
-Phone-first personal executive assistant for Ryan. One US Twilio number he can call or text. Voice runs over a Twilio Media Streams ↔ Gemini Live bridge; async work (SMS, daily briefing, scheduled callbacks) runs through one Paperclip agent (`ea`).
+Phone-first personal executive assistant for Ryan. He **calls** one US Twilio number (voice runs over a Twilio Media Streams ↔ Gemini Live bridge) and **texts** EA over Discord. Async work (Discord messages, daily briefing, scheduled callbacks) runs through one Paperclip agent (`ea`). Text moved off SMS to Discord to skip Twilio A2P 10DLC registration; Twilio is voice-only.
 
 Single user. Not a product. Separate company from Vantyx (VAN) and Faceless Media (FAC) on the same `paperclip-prod` droplet.
 
@@ -56,8 +56,9 @@ Full implementation plan: `~/.claude/plans/plan-mode-build-ea-jiggly-sundae.md`.
 ## Droplet-side steps (not done by `companies.sh`)
 
 1. Create `/etc/ea/env` (chmod 600) and `/etc/ea/contacts.json`.
-2. Deploy the **whole repo** to `/opt/ea` (the bridge resolves skills/migrations/persona relative to the repo root, so the bridge-only layout breaks), then `cd /opt/ea/services/voice-bridge && npm ci` and install the systemd unit.
+2. Deploy the **whole repo** to `/opt/ea` (the bridge resolves skills/migrations/persona relative to the repo root, so the bridge-only layout breaks), then `cd /opt/ea/services/voice-bridge && npm ci` and `cd /opt/ea/services/discord-bridge && npm ci`, and install both systemd units.
 3. Configure Cloudflare Tunnel (`cloudflared/config.yml`).
 4. Register Azure AD app (delegated Graph scopes) + mint refresh token.
-5. Twilio: number, voice webhook, messaging service, A2P 10DLC (see plan Section 7).
-6. Create the routines via the Paperclip API/UI (they don't import).
+5. Twilio: number + voice webhook only (no A2P/messaging service needed — voice doesn't require it).
+6. Discord: create the bot, enable Message Content intent, invite to a private server, set `DISCORD_*` in `/etc/ea/env` (see `services/discord-bridge/README.md`).
+7. Create the routines via the Paperclip API/UI (they don't import).
