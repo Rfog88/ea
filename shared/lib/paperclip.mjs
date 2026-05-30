@@ -4,6 +4,8 @@
 // (same pattern Vantyx used). Adjust paths here if the instance differs; all skills
 // route through this module so there is one place to fix.
 
+import "./env.mjs";
+
 const COMPANY_SLUG = process.env.EA_COMPANY_SLUG || "ea";
 
 function base() {

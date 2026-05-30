@@ -1,6 +1,7 @@
 // Shared contact resolution for EA skills.
 // Source of truth: /etc/ea/contacts.json (EA_CONTACTS_PATH). NEVER guess a contact.
 import { readFileSync } from "node:fs";
+import "./env.mjs";
 
 export function loadContacts() {
   const path = process.env.EA_CONTACTS_PATH || "/etc/ea/contacts.json";

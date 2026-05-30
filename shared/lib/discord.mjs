@@ -2,6 +2,7 @@
 // EA is single-user: the only recipient is Ryan, reached either via a fixed
 // private channel (DISCORD_CHANNEL_ID) or a DM opened to DISCORD_OWNER_ID.
 // Sending uses the bot token over plain REST — no gateway connection needed.
+import "./env.mjs";
 
 const API = "https://discord.com/api/v10";
 

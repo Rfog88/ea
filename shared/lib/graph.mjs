@@ -2,6 +2,8 @@
 // Delegated OAuth on Ryan's M365 Business account. Email/Teams send AS Ryan.
 // Requires: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, MS_GRAPH_REFRESH_TOKEN
 
+import "./env.mjs";
+
 const TOKEN_HOST = "https://login.microsoftonline.com";
 const GRAPH = "https://graph.microsoft.com/v1.0";
 
