@@ -44,17 +44,16 @@ async function api(path, init = {}) {
 }
 
 // Create an Issue assigned to the `ea` agent.
-export function createIssue({ title, body, labels = [], dueAt = null, assigneeSlug = "ea", parentId = null }) {
+// The live API takes `description` (not `body`), assigns by agent UUID
+// (`assigneeAgentId`, from EA_AGENT_ID) — slug-based assignee and `labels` on
+// create are ignored by this build.
+export function createIssue({ title, body, labels = [], dueAt = null, parentId = null }) {
+  const payload = { title, description: body };
+  if (process.env.EA_AGENT_ID) payload.assigneeAgentId = process.env.EA_AGENT_ID;
+  if (parentId) payload.parentId = parentId;
   return api(`/api/companies/${COMPANY}/issues`, {
     method: "POST",
-    body: JSON.stringify({
-      title,
-      body,
-      labels,
-      dueAt,
-      assigneeAgentSlug: assigneeSlug,
-      parentId,
-    }),
+    body: JSON.stringify(payload),
   });
 }
 
